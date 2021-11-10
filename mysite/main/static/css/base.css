@@ -1,6 +1,9 @@
 
+body {
+  background-color: #e1ccaa;
+}
 .topbar-responsive {
-  background: #2c3840;
+  background: #991f27;
   padding: 1rem 1.5rem;
 }
 
@@ -10,7 +13,7 @@
 }
 
 .topbar-responsive .menu {
-  background: #2c3840;
+  background: #991f27;
 }
 
 .topbar-responsive .menu li:last-of-type {
