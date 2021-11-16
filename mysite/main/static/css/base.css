@@ -2,6 +2,11 @@
 body {
   background-color: #e1ccaa;
 }
+
+.content {
+  background-color: #e1ccaa;
+}
+
 .topbar-responsive {
   background: #991f27;
   padding: 1rem 1.5rem;

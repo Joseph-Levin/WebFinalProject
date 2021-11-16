@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', views.logout_view),
     path('password_change/', auth_views.PasswordChangeView.as_view(success_url='/')),
     path('household/', views.household_view),
+    path('household_invite/', views.household_invite_view),
 
 ]

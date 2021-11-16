@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.http import HttpResponse
 
-from .forms import RegistrationForm, HouseholdForm
+from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm
 
 
 def index(request):
@@ -52,3 +52,19 @@ def household_view(request):
     }
 
     return render(request, 'household.html', context=context)
+
+def household_invite_view(request):
+    if request.method == "POST":
+        form = HouseholdInviteForm(request.user, request.POST)
+        if form.is_valid():
+            invite = form.save(request)
+
+    else:
+        form = HouseholdInviteForm(request.user)
+
+    context = {
+        'title': 'Invite a User',
+        'form': form,
+    }
+
+    return render(request, 'household_invite.html', context=context)

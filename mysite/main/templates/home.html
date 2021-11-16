@@ -1,4 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ name }}</h1>
+    <div class="grid-x">
+        <div class="cell auto"></div>
+        <div class="column large-6">
+            {% if request.user.is_authenticated %}
+            <!-- <h1 class="align-center-middle">Welcome {{ request.user.first_name }}</h1> -->
+                Welcome {{ request.user.first_name }}
+            {% else %}
+            <!-- <h1 class="text-center">Poodog</h1> -->
+            Poodog
+            {% endif %}
+        </div>
+        <div class="cell auto"></div>
+    </div>
 {% endblock %}
