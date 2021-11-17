@@ -1,10 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ title }}</h1>
-<form action="/household/" method="post">
-    {% csrf_token %}
+<div class="grid-x grid-padding-x">
+    <div class="cell large-12 medium-12 small-12">
+        <div class="cell auto"></div>
+        <div class="cell large-8 medium-8 small-12">
+            <h1 class="text-center">{{ title }}</h1>
+        </div>
+        <div class="cell auto"></div>
+    </div>
+    <div class="cell large-2 medium-2"></div>
+    <div class="cell large-8 medium-8 small-12">
+        <form action="/household/" method="post">
+            {% csrf_token %}
 
-    {{ form }}
-    <input type="submit" class="button expanded" value="Create Household" />
-</form>
+            {{ form }}
+            <input type="submit" class="button expanded" name="Create Household" value="Create Household" />
+        </form>
+    </div>
+    <div class="cell large-2 medium-2"></div>
+</div>
 {% endblock %}

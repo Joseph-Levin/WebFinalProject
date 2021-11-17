@@ -1,16 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="grid-x">
-        <div class="cell auto"></div>
-        <div class="column large-6">
+<div class="grid-x">
+    <div class="cell auto"></div>
+    <div class="column large-8 medium-8 small-12">
             {% if request.user.is_authenticated %}
-            <!-- <h1 class="align-center-middle">Welcome {{ request.user.first_name }}</h1> -->
-                Welcome {{ request.user.first_name }}
+            <h1 class="text-center">Welcome {{ request.user.first_name }}</h1>
+
             {% else %}
-            <!-- <h1 class="text-center">Poodog</h1> -->
-            Poodog
+            <h1 class="text-center">Poodog</h1>
             {% endif %}
-        </div>
-        <div class="cell auto"></div>
     </div>
+    <div class="cell auto"></div>
+</div>
 {% endblock %}
