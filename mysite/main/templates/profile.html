@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Profile head -->
+<div class="grid-x grid-margin-x">
+    <div class="cell large-6 medium-6 small-6 text-right" style="align-items:center;">
+        <h1 class="text-right">{{ user }}</h1>
+    </div>
+    <div class="cell large-6 medium-6 small-6" style="display:flex;align-items:center;">
+        <h4 class="text-left light-opacity">- {{ user.first_name }} {{ user.last_name }}</h4>
+    </div>
+</div>
+
+<!-- Buffer -->
+<div class="grid-y" style="height: 5vh;"></div>
+
+<div class="grid-x">
+    <div class="grid-y cell large-6 medium-6 small-6" style="height: 50vh;">
+        <h5>Change Profile</h5>
+        <a href="/password_change/">Change Password</a>
+        <a href="/update_profile/">Update Profile</a>
+    </div>
+    <div class="grid-y cell large-6 medium-6 small-6" style="height: 50vh;">
+        {% for household in households %}
+        <div class="grid-x align-center">
+            <div class="cell medium-8">
+                <div class="blog-post">
+                    <h3>{{ household.name }}</h3>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

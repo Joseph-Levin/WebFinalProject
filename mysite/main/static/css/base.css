@@ -1,6 +1,14 @@
 
+/* div {
+  border: 1px dashed;
+} */
+
 body {
   background-color: #e1ccaa;
+}
+
+.light-opacity {
+  opacity: 0.5;
 }
 
 .content {

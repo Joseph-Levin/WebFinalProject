@@ -65,13 +65,6 @@ class HouseholdForm(forms.Form):
         return household_instance
 
 
-# class HouseholdInviteForm(forms.Form):
-#     household = forms.CharField(
-#         max_length=32,
-#         label='Household Name',
-#         required=True,
-#     )
-
 class HouseholdInviteForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
@@ -99,3 +92,12 @@ class HouseholdInviteForm(forms.ModelForm):
             return invite_instance
 
 
+class UpdateUserForm(forms.ModelForm):
+    username = forms.CharField(required=True)
+    email = forms.EmailField(required=True)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
+
+    class Meta:
+        model = auth_user
+        fields = ['username', 'email', 'first_name', 'last_name']

@@ -1,15 +1,53 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="grid-x">
+<!-- <div class="grid-x">
     <div class="cell auto"></div>
     <div class="column large-8 medium-8 small-12">
-            {% if request.user.is_authenticated %}
-            <h1 class="text-center">Welcome {{ request.user.first_name }}</h1>
+        {% if request.user.is_authenticated %}
+        <h1 class="text-center">Welcome {{ request.user.first_name }}</h1>
 
-            {% else %}
-            <h1 class="text-center">Poodog</h1>
-            {% endif %}
+
+        {% else %}
+        <h1 class="text-center">Poodog</h1>
+        {% endif %}
     </div>
     <div class="cell auto"></div>
+</div> -->
+<!-- Title Card -->
+<div class="callout large primary">
+    <div class="text-center">
+        <h1>Household Hub</h2>
+            {% if request.user.is_authenticated %}
+            <h2 class="subheader">Welcome {{ request.user.first_name }}</h2>
+            {% else %}
+            <h2 class="subheader">Poodog</h2>
+            {% endif %}
+    </div>
 </div>
+
+<!-- Body Information -->
+<article class="grid-container">
+    {% for household in households %}
+    <div class="grid-x align-center">
+        <div class="cell medium-8">
+            <div class="blog-post">
+                <h3>{{ household.name }}</h3>
+                <!-- <img class="thumbnail" src="https://placehold.it/850x350"> -->
+                <ul>
+                    {% for member in household.members.all %}
+                    <li>{{ member.username }}</li>
+                    {% endfor %}
+                </ul>
+                <div class="callout">
+                    <ul class="menu simple">
+                        <li><a href="#">Author: Mike Mikers</a></li>
+                        <li><a href="#">Comments: 3</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</article>
 {% endblock %}
