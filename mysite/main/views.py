@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.conf import settings
 
 from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, UpdateUserForm
 from .models import HouseholdInviteModel, HouseholdModel
@@ -45,7 +46,7 @@ def logout_view(request):
 @login_required
 def household(request):
     if request.method == 'POST':
-        form = HouseholdForm(request.POST)
+        form = HouseholdForm(request.POST, request.FILES)
         if form.is_valid():
             household = form.save(request)
             household.members.add(request.user)
@@ -54,9 +55,13 @@ def household(request):
     else:
         form = HouseholdForm()
 
+    households = HouseholdModel.objects.filter(members__id=request.user.id)
+
     context = {
         'title': 'Add a Household',
         'form': form,
+        'households': households,
+        'default_icon': settings.MEDIA_URL+'icons/default_icon.jpg',
     }
 
     return render(request, 'household.html', context=context)

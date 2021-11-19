@@ -5,14 +5,10 @@ from django.contrib.auth.models import User
 class HouseholdModel(models.Model):
   name = models.CharField(max_length=255)
   members = models.ManyToManyField(User, related_name='members')
+  icon = models.ImageField(upload_to='icons/', blank=True)
 
   def __str__(self):
     return self.name
-
-
-# class HouseholdMemberModel(models.Model):
-#   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user')
-#   household = models.ForeignKey(HouseholdModel, on_delete=models.CASCADE, related_name='member')
 
 class ListModel(models.Model):
   name = models.CharField(max_length=255, unique=True)

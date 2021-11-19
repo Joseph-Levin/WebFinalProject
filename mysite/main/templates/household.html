@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
+<!-- <script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/js/foundation.core.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/js/foundation.accordion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/foundation-sites@6.7.4/js/foundation.util.keyboard.js"></script> -->
+
 <div class="grid-x grid-padding-x">
     <div class="cell large-12 medium-12 small-12">
         <div class="cell auto"></div>
@@ -10,10 +14,42 @@
     </div>
     <div class="cell large-2 medium-2"></div>
     <div class="cell large-8 medium-8 small-12">
-        <ul class="accordion" data-accordion data-allow-all-closed="true">
+        <form action="/household/" enctype="multipart/form-data" method="post">
+            {% csrf_token %}
+
+            {{ form }}
+            <input type="submit" class="button expanded" name="Create Household" value="Create Household" />
+        </form>
+    </div>
+    <div class="cell large-2 medium-2"></div>
+
+    <div class="cell large-2 medium-2"></div>
+    <div class="cell large-8 medium-8 small-12">
+        {% for house in households %}
+        <div class="card">
+            <div class="card-divider">
+                <a href="household/{{ house.id }}">
+                    <h4>{{ house.name }}</h4>
+                </a>
+            </div>
+            <div class="card-section">
+                {% if house.icon %}
+                <img src="{{ house.icon.url }}" />
+                {% else %}
+                <img src="{{ default_icon }}" />
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="cell large-2 medium-2"></div>
+
+    <!-- <div class="cell large-8 medium-8 small-12">
+        <ul id="accordion1" class="accordion" data-accordion data-allow-all-closed="true">
             <li class="accordion-item" data-accordion-item>
-                <a href="#" class="accordion-title">Create a New Household</a>
-                <div class="accordion-content" data-tab-content>
+                <a id="accordion2" class="accordion-title"><label for="panel-1">Create a New Household</label></a>
+                <div id="accordion3" class="accordion-content content-1" data-tab-content>
                     <form action="/household/" method="post">
                         {% csrf_token %}
 
@@ -23,7 +59,7 @@
                 </div>
             </li>
         </ul>
-    </div>
+    </div> -->
     <div class="cell large-2 medium-2"></div>
 </div>
 {% endblock %}

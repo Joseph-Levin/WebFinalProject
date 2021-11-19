@@ -49,20 +49,33 @@ class RegistrationForm(UserCreationForm):
         return user
 
 
-class HouseholdForm(forms.Form):
-    name = forms.CharField(
-        max_length=32,
-        label='Household Name',
-        required=True,
-        validators=[unique_household_name]
-    )
+class HouseholdForm(forms.ModelForm):
+    class Meta:
+        model = models.HouseholdModel
+        fields = ('name', 'icon')
+
+    def save(self, commit=True):
+        household = super(HouseholdForm, self).save()
+        return household
+
+    # name = forms.CharField(
+    #     max_length=32,
+    #     label='Household Name',
+    #     required=True,
+    #     validators=[unique_household_name]
+    # )
+    # icon = forms.ImageField(
+    #     label='Household Icon',
+    #     required=False
+    # )
 
 
-    def save(self, request):
-        household_instance = models.HouseholdModel()
-        household_instance.name = self.cleaned_data['name']
-        household_instance.save()
-        return household_instance
+    # def save(self, request):
+    #     household_instance = models.HouseholdModel()
+    #     household_instance.name = self.cleaned_data['name']
+    #     household_instance.icon = self.cleaned_data['icon']
+    #     household_instance.save()
+    #     return household_instance
 
 
 class HouseholdInviteForm(forms.ModelForm):
