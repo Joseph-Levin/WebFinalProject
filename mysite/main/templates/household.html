@@ -10,12 +10,19 @@
     </div>
     <div class="cell large-2 medium-2"></div>
     <div class="cell large-8 medium-8 small-12">
-        <form action="/household/" method="post">
-            {% csrf_token %}
+        <ul class="accordion" data-accordion data-allow-all-closed="true">
+            <li class="accordion-item" data-accordion-item>
+                <a href="#" class="accordion-title">Create a New Household</a>
+                <div class="accordion-content" data-tab-content>
+                    <form action="/household/" method="post">
+                        {% csrf_token %}
 
-            {{ form }}
-            <input type="submit" class="button expanded" name="Create Household" value="Create Household" />
-        </form>
+                        {{ form }}
+                        <input type="submit" class="button expanded" name="Create Household" value="Create Household" />
+                    </form>
+                </div>
+            </li>
+        </ul>
     </div>
     <div class="cell large-2 medium-2"></div>
 </div>

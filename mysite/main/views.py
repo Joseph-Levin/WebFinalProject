@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, UpdateUserForm
-from .models import HouseholdModel
+from .models import HouseholdInviteModel, HouseholdModel
 
 
 def index(request):
@@ -20,7 +20,7 @@ def index(request):
 
 
 # Register
-def register_view(request):
+def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -43,7 +43,7 @@ def logout_view(request):
     return redirect('/login/')
 
 @login_required
-def household_view(request):
+def household(request):
     if request.method == 'POST':
         form = HouseholdForm(request.POST)
         if form.is_valid():
@@ -62,7 +62,7 @@ def household_view(request):
     return render(request, 'household.html', context=context)
 
 @login_required
-def household_invite_view(request):
+def household_invite(request):
     if request.method == 'POST':
         form = HouseholdInviteForm(request.user, request.POST)
         if form.is_valid():
@@ -79,17 +79,19 @@ def household_invite_view(request):
     return render(request, 'household_invite.html', context=context)
 
 @login_required
-def profile_view(request):
+def profile(request):
     households = HouseholdModel.objects.filter(members__id=request.user.id)
+    invites = HouseholdInviteModel.objects.filter(invitee=request.user)
     context = {
         'user': request.user,
         'households': households,
+        'invites': invites,
     }
 
     return render(request, 'profile.html', context=context)
 
 @login_required
-def update_profile_view(request):
+def update_profile(request):
     if request.method == 'POST':
         form = UpdateUserForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -104,3 +106,29 @@ def update_profile_view(request):
     }
 
     return render(request, 'registration/update_profile.html', context=context)
+
+@login_required
+def accept_invite(request, id):
+    household = HouseholdModel.objects.get(pk=id)
+    household.members.add(request.user)
+    invite = HouseholdInviteModel.objects.get(invitee=request.user, household=id)
+    invite.delete()
+    return redirect('/')
+
+
+@login_required
+def decline_invite(request, id):
+    HouseholdInviteModel.objects.get(pk=id).delete()
+
+    return redirect(profile)
+
+
+@login_required
+def leave_household(request, id):
+    household = HouseholdModel.objects.get(pk=id)
+    household.members.remove(request.user)
+
+    if household.members.count() == 0:
+        household.delete()
+
+    return redirect('/')

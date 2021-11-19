@@ -26,11 +26,30 @@
                 <div class="blog-post">
                     <h3>{{ household.name }}</h3>
                 </div>
+                <a href="/leave_household/{{ household.id }}?next={{ request.path|urlencode}}">Leave Household</a>
             </div>
         </div>
         {% endfor %}
     </div>
 </div>
+<!-- ?next={{ request.path|urlencode }} -->
+<!-- Buffer -->
+<div class="grid-y" style="height: 5vh;"></div>
 
+<div class="grid-x align-center">
+    {% for invite in invites %}
+    <div class="cell large-4 medium-4 small-12" style="padding: 2vw;">
+        <div class="card">
+            <div class="card-section">
+                <h4>Invite to join {{ invite.household }}</h4>
+                <p>From {{ invite.inviter }}:</p>
+                <p>{{ invite.message }}</p>
+                <a href="/accept/{{ invite.household.id }}">Accept</a>
+                <a href="/decline/{{ invite.id }}">Decline</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
