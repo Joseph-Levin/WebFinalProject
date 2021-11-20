@@ -67,21 +67,24 @@ def household(request):
     return render(request, 'household.html', context=context)
 
 @login_required
-def household_invite(request):
+def household_invite(request, id):
     if request.method == 'POST':
-        form = HouseholdInviteForm(request.user, request.POST)
+        form = HouseholdInviteForm(request.POST, userid=request.user.id, houseid=id)
         if form.is_valid():
             invite = form.save(request)
+            return redirect('/household/'+ str(id))
 
     else:
-        form = HouseholdInviteForm(request.user)
-
+        form = HouseholdInviteForm(userid=request.user.id, houseid=id)
+        
     context = {
         'title': 'Invite a User',
         'form': form,
+        'id': id,
     }
-
     return render(request, 'household_invite.html', context=context)
+
+
 
 @login_required
 def profile(request):
@@ -137,3 +140,13 @@ def leave_household(request, id):
         household.delete()
 
     return redirect('/')
+
+@login_required
+def household_home(request, id):
+    household = HouseholdModel.objects.get(pk=id)
+
+    context = {
+        'household': household,
+    }
+
+    return render(request, 'household_home/home.html', context=context)

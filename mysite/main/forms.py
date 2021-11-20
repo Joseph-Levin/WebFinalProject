@@ -80,27 +80,26 @@ class HouseholdForm(forms.ModelForm):
 
 class HouseholdInviteForm(forms.ModelForm):
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
+        self.userid = kwargs.pop('userid', None)
+        self.houseid = kwargs.pop('houseid', None)
         super(HouseholdInviteForm, self).__init__(*args, **kwargs)
-        self.fields['household'].queryset = models.HouseholdModel.objects.filter(members__id=self.user.id)
-        self.fields['invitee'].queryset = models.User.objects.exclude(id=self.user.id)
+        self.fields['invitee'].queryset = models.User.objects.exclude(members__id=self.houseid)
 
     class Meta:
         model=models.HouseholdInviteModel
-        fields = ['household', 'invitee', 'message']
+        fields = ['invitee', 'message']
 
 
-    household = forms.ModelChoiceField(queryset=None)
     invitee = forms.ModelChoiceField(queryset=None)
     message = forms.CharField(max_length=1024)
 
     def save(self, request):
             invite_instance = models.HouseholdInviteModel()
-            invite_instance.household = self.cleaned_data['household']
             invite_instance.invitee = self.cleaned_data['invitee']
             invite_instance.message = self.cleaned_data['message']
             invite_instance.inviter = request.user
+            invite_instance.household = models.HouseholdModel.objects.get(pk=self.houseid)
             invite_instance.save()
             return invite_instance
 

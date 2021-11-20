@@ -26,10 +26,12 @@
     </div>
     <div class="cell large-2 medium-2"></div>
     <div class="cell large-8 medium-8 small-12">
-        <form action="/household_invite/" method="post">
+        <form action="" method="post">
             {% csrf_token %}
 
-            {{ form }}
+            {{ form.errors }}
+            {{ form.invitee }}
+            {{ form.message }}
             <input type="submit" class="button expanded" name="Invite" value="Invite" />
         </form>
     </div>
