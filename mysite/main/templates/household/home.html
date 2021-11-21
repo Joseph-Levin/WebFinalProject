@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="grid-container large-8 medium-8 small-12">
+    <div class="grid-x align-center-middle">
+        <div class="cell large-2 medium-2"></div>
+        <div class="text-center cell large-8 medium-8 small-12">
+            <h2>{{ household.name }} Homepage</h2>
+        </div>
+        <div class="cell large-2 medium-2">
+            <a href="invite"><h6>Invite</h6></a>
+        </div>
+    </div>
+    <div class="grid-x align-center">
+        {% for member in household.members.all %}
+            <div class="cell large-4 medium-4 small-6">
+                <h6>{{ member.username }}</h6>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="grid-y" style="height: 200px">
+        {% for list in lists %}
+        <div class="grid-x">
+            <a href="list/{{ list.id}}">{{ list.name }}</a>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

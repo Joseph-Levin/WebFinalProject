@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div id="list">
+    <div class="grid-container large-8 medium-8 small-12">
+        <div class="grid-x">
+            <h2>{{ list.name }}</h2>
+        </div>
+
+        <ul class="incomplete_items">
+            <h4>Incomplete</h4>
+            {% for item in listitems %}
+            {% if not item.complete %}
+            <li>
+                {{ item.description }}
+                <a href="listitem/{{ item.id }}/toggle/" class="button">Mark as Done</a>
+                <a href="listitem/{{ item.id }}/edit/" class="button">Edit</a>
+                <a href="listitem/{{ item.id }}/delete/" class="button">Delete</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+        </ul>
+
+        <ul class="complete_items">
+            <h4>Complete</h4>
+            {% for item in listitems %}
+            {% if item.complete %}
+            <li>
+                {{ item.description }}
+                <a href="listitem/{{ item.id }}/toggle/" class="button">Mark not Done</a>
+                <a href="listitem/{{ item.id }}/edit/" class="button">Edit</a>
+                <a href="listitem/{{ item.id }}/delete/" class="button">Delete</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+        </ul>
+
+        <div class="grid-x">
+            <form action="" method="post">
+                {% csrf_token %}
+
+                {{ form }}
+                <input type="submit" class="button expanded" value="Add Item" />
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    window.listId = "{{ list.id }}"
+</script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/list.js' %}"></script>
+{% endblock %}

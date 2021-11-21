@@ -58,25 +58,6 @@ class HouseholdForm(forms.ModelForm):
         household = super(HouseholdForm, self).save()
         return household
 
-    # name = forms.CharField(
-    #     max_length=32,
-    #     label='Household Name',
-    #     required=True,
-    #     validators=[unique_household_name]
-    # )
-    # icon = forms.ImageField(
-    #     label='Household Icon',
-    #     required=False
-    # )
-
-
-    # def save(self, request):
-    #     household_instance = models.HouseholdModel()
-    #     household_instance.name = self.cleaned_data['name']
-    #     household_instance.icon = self.cleaned_data['icon']
-    #     household_instance.save()
-    #     return household_instance
-
 
 class HouseholdInviteForm(forms.ModelForm):
 
@@ -84,7 +65,9 @@ class HouseholdInviteForm(forms.ModelForm):
         self.userid = kwargs.pop('userid', None)
         self.houseid = kwargs.pop('houseid', None)
         super(HouseholdInviteForm, self).__init__(*args, **kwargs)
-        self.fields['invitee'].queryset = models.User.objects.exclude(members__id=self.houseid)
+        self.fields['invitee'].queryset = models.User.objects.exclude(invitee__in=models.HouseholdInviteModel.objects.filter(household=self.houseid)).exclude(members__id=self.houseid)
+        print(self.fields['invitee'].queryset)
+        # self.fields['invitee'].queryset = models.User.objects.exclude(members__id=self.houseid)
 
     class Meta:
         model=models.HouseholdInviteModel
@@ -113,3 +96,28 @@ class UpdateUserForm(forms.ModelForm):
     class Meta:
         model = auth_user
         fields = ['username', 'email', 'first_name', 'last_name']
+
+
+class ListItemForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        if instance is None:
+            self.userid = kwargs.pop('userid', None)
+            self.listid = kwargs.pop('listid', None)
+            kwargs.update(initial={
+                    'list': self.listid,
+                    'author': self.userid,
+                })
+
+        super(ListItemForm, self).__init__(*args, **kwargs)
+
+
+    class Meta:
+        model = models.ListItemModel
+        fields = '__all__'
+        widgets = {
+            'complete': forms.HiddenInput(),
+            'list': forms.HiddenInput(),
+            'author': forms.HiddenInput(),
+            }

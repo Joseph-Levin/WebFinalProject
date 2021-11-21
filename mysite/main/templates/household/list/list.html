@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="grid-container large-8 medium-8 small-12">
+    <div class="grid-x">
+        <h2>{{ list.name }}</h2>
+    </div>
+
+    {% verbatim %}
+    <div id="list">
+        <ul class="incomplete_items">
+            <h4>Incomplete</h4>
+            <div  v-for="item in incompleteItems">
+                <li>
+                    {{ item.fields['description'] }}
+                    <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button">Mark as Done</a>
+                    <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button">Edit</a>
+                    <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button">Delete</a>
+                </li>
+            </div>
+
+        </ul>
+
+        <ul class="complete_items">
+            <h4>Complete</h4>
+            <div  v-for="item in completeItems">
+                <li>
+                    {{ item.fields['description'] }}
+                    <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button">Mark not Done</a>
+                    <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button">Edit</a>
+                    <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button">Delete</a>
+                </li>
+            </div>
+
+        </ul>
+
+    </div>
+    {% endverbatim %}
+
+    <div class="grid-x">
+        <form  method="post">
+            {% csrf_token %}
+
+            {{ form }}
+            <input type="submit" class="button expanded" value="Add Item" />
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    window.listId = "{{ list.id }}"
+</script>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="{% static 'js/list.js' %}"></script>
+{% endblock %}

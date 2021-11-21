@@ -1,12 +1,14 @@
-from django.http.response import HttpResponseRedirect
+from typing import List
+from django.core import serializers
+from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.conf import settings
 
-from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, UpdateUserForm
-from .models import HouseholdInviteModel, HouseholdModel
+from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, UpdateUserForm, ListItemForm
+from .models import HouseholdInviteModel, HouseholdModel, ListItemModel, ListModel
 
 
 def index(request):
@@ -64,7 +66,7 @@ def household(request):
         'default_icon': settings.MEDIA_URL+'icons/default_icon.jpg',
     }
 
-    return render(request, 'household.html', context=context)
+    return render(request, 'view_households.html', context=context)
 
 @login_required
 def household_invite(request, id):
@@ -82,7 +84,7 @@ def household_invite(request, id):
         'form': form,
         'id': id,
     }
-    return render(request, 'household_invite.html', context=context)
+    return render(request, 'household/invite.html', context=context)
 
 
 
@@ -144,9 +146,68 @@ def leave_household(request, id):
 @login_required
 def household_home(request, id):
     household = HouseholdModel.objects.get(pk=id)
+    lists = ListModel.objects.filter(household=id)
 
     context = {
         'household': household,
+        'lists': lists,
     }
 
-    return render(request, 'household_home/home.html', context=context)
+    return render(request, 'household/home.html', context=context)
+
+@login_required
+def view_list(request, id, listid):
+    list = ListModel.objects.get(pk=listid)
+    listitems = ListItemModel.objects.filter(list=listid)
+
+    if request.method == 'POST':
+        form = ListItemForm(request.POST, userid=request.user.id, listid=listid)
+        if form.is_valid():
+            form.save()
+    else:
+        form = ListItemForm(userid=request.user.id, listid=listid)
+    
+    context = {
+        'form': form,
+        'list': list,
+        'listitems': listitems,
+    }
+
+    return render(request, 'household/list/list.html', context=context)
+
+@login_required
+def list_item_toggle(request, id, listid, itemid):
+    list_item = ListItemModel.objects.get(pk=itemid)
+    list_item.complete = not list_item.complete
+    list_item.save()
+
+    return redirect('/household/'+str(id)+'/list/'+str(listid))
+
+@login_required
+def list_item_delete(request, id, listid, itemid):
+    list_item = ListItemModel.objects.get(pk=itemid)
+    list_item.delete()
+
+    return redirect('/household/'+str(id)+'/list/'+str(listid))
+
+@login_required
+def list_item_edit(request, id, listid, itemid):
+    list_item = ListItemModel.objects.get(pk=itemid)
+    if request.method == 'POST':
+        form = ListItemForm(request.POST, instance=list_item)
+        if form.is_valid():
+            form.save()
+            return redirect('/household/'+str(id)+'/list/'+str(listid))
+    
+    else:
+        form = ListItemForm(instance=list_item)
+
+    return render(request, 'household/list/listitem.html', {'id': id, 'listid': listid, 'form': form})
+
+
+def list_json(request, listid):
+    list = ListModel.objects.get(pk=listid)
+    list_items = ListItemModel.objects.filter(list=listid)
+    data = serializers.serialize('json', list_items)
+
+    return HttpResponse(data)
