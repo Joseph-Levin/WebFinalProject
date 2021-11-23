@@ -18,6 +18,8 @@ def index(request):
     
     context = {
         'households': households,
+        'default_icon': settings.MEDIA_URL+'icons/default_icon.jpg',
+
     }
     return render(request, 'home.html', context=context)
 

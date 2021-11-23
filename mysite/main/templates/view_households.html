@@ -12,16 +12,6 @@
         </div>
         <div class="cell auto"></div>
     </div>
-    <div class="cell large-2 medium-2"></div>
-    <div class="cell large-8 medium-8 small-12">
-        <form action="/household/" enctype="multipart/form-data" method="post">
-            {% csrf_token %}
-
-            {{ form }}
-            <input type="submit" class="button expanded" name="Create Household" value="Create Household" />
-        </form>
-    </div>
-    <div class="cell large-2 medium-2"></div>
 
     <div class="cell large-2 medium-2"></div>
     <div class="cell large-8 medium-8 small-12">
@@ -42,15 +32,15 @@
         </div>
         {% endfor %}
     </div>
-
     <div class="cell large-2 medium-2"></div>
 
-    <!-- <div class="cell large-8 medium-8 small-12">
+    <div class="cell large-2 medium-2"></div>
+    <div class="cell large-8 medium-8 small-12">
         <ul id="accordion1" class="accordion" data-accordion data-allow-all-closed="true">
             <li class="accordion-item" data-accordion-item>
-                <a id="accordion2" class="accordion-title"><label for="panel-1">Create a New Household</label></a>
+                <a id="accordion2" class="accordion-title"><h4 for="panel-1">Create a New Household</h4></a>
                 <div id="accordion3" class="accordion-content content-1" data-tab-content>
-                    <form action="/household/" method="post">
+                    <form action="/household/" enctype="multipart/form-data" method="post">
                         {% csrf_token %}
 
                         {{ form }}
@@ -59,7 +49,7 @@
                 </div>
             </li>
         </ul>
-    </div> -->
+    </div>
     <div class="cell large-2 medium-2"></div>
 </div>
 {% endblock %}

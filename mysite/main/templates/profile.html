@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 <!-- Profile head -->
-<div class="grid-x grid-margin-x">
+<div class="grid-x grid-margin-x header">
     <div class="cell large-6 medium-6 small-6 text-right" style="align-items:center;">
         <h1 class="text-right">{{ user }}</h1>
     </div>
@@ -10,16 +10,17 @@
     </div>
 </div>
 
-<!-- Buffer -->
-<div class="grid-y" style="height: 5vh;"></div>
 
 <div class="grid-x">
-    <div class="grid-y cell large-6 medium-6 small-6" style="height: 50vh;">
-        <h5>Change Profile</h5>
-        <a href="/password_change/">Change Password</a>
-        <a href="/update_profile/">Update Profile</a>
+    <div class="cell large-6 medium-6 small-6" style="border-right-style: solid; border-right-width: thin; border-right-color: #cecece">
+        <h5 class="text-center">Change Profile</h5>
+
+        <ul style="margin: 0 auto; display: table; text-align: left;">
+            <li style="list-style-type: none;"><a href="/password_change/">Change Password</a></li>
+            <li style="list-style-type: none;"><a href="/update_profile/">Update Profile</a></li>
+        </ul>
     </div>
-    <div class="grid-y cell large-6 medium-6 small-6" style="height: 50vh;">
+    <div class="cell large-6 medium-6 small-6">
         {% for household in households %}
         <div class="grid-x align-center">
             <div class="cell medium-8">
