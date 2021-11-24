@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'main.apps.MainConfig',
+    'channels',
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,5 +134,4 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 
-print('base dir', BASE_DIR)
-print('media root', MEDIA_ROOT)
+ASGI_APPLICATION = 'mysite.asgi.application'
