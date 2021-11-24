@@ -11,9 +11,11 @@
 </div>
 
 
-<div class="grid-x">
-    <div class="cell large-6 medium-6 small-6" style="border-right-style: solid; border-right-width: thin; border-right-color: #cecece">
-        <h5 class="text-center">Change Profile</h5>
+<!-- Editing Profile and Household Display -->
+<div class="grid-x" style="padding-bottom: 5vh; border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece">
+    <div class="cell large-6 medium-6 small-6"
+        style="border-right-style: solid; border-right-width: thin; border-right-color: #cecece">
+        <h4 class="text-center">Edit Profile</h4>
 
         <ul style="margin: 0 auto; display: table; text-align: left;">
             <li style="list-style-type: none;"><a href="/password_change/">Change Password</a></li>
@@ -21,36 +23,51 @@
         </ul>
     </div>
     <div class="cell large-6 medium-6 small-6">
-        {% for household in households %}
-        <div class="grid-x align-center">
-            <div class="cell medium-8">
-                <div class="blog-post">
-                    <h3>{{ household.name }}</h3>
+        <h4 class="text-center">Your Households</h4>
+        <ul style="margin: 0 auto; display: table;">
+            {% for household in households %}
+            <li style="list-style-type: none;">
+                <div class="grid-x">
+                    <div class="cell large-10 medium-10 small-10">
+                        <a style="text-align: left;" href="/household/{{ household.id }}/">{{ household.name }}</a>
+                    </div>
+                    <div class="cell large-2 medium-2 small-2">
+                        <a style="text-align: right; color:#ff3333;"
+                            href="/leave_household/{{ household.id }}">&nbsp;&nbsp;&nbsp;✕</a>
+                    </div>
                 </div>
-                <a href="/leave_household/{{ household.id }}?next={{ request.path|urlencode}}">Leave Household</a>
-            </div>
-        </div>
-        {% endfor %}
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
-<!-- ?next={{ request.path|urlencode }} -->
-<!-- Buffer -->
-<div class="grid-y" style="height: 5vh;"></div>
 
+{% if invites %}
 <div class="grid-x align-center">
+    <div class="cell large-12 medium-12 small-12" style="margin-bottom: 3vh; margin-top: 3vh;">
+        <h4 class="text-center">Pending Household Invitations</h4>
+    </div>
     {% for invite in invites %}
-    <div class="cell large-4 medium-4 small-12" style="padding: 2vw;">
-        <div class="card">
-            <div class="card-section">
-                <h4>Invite to join {{ invite.household }}</h4>
-                <p>From {{ invite.inviter }}:</p>
-                <p>{{ invite.message }}</p>
-                <a href="/accept/{{ invite.household.id }}">Accept</a>
-                <a href="/decline/{{ invite.id }}">Decline</a>
+    <div class="cell large-2 medium-2"></div>
+    <div class="card invite_card cell large-8 medium-8 small-12">
+        <div class="card-section">
+            <h5>Invite to join {{ invite.household }}</h5>
+            <p>From {{ invite.inviter }}:</p>
+            <p>{{ invite.message }}</p>
+            <div class="grid-x">
+                <div class="cell large-6 medium-6 small-6">
+                    <a href="/accept/{{ invite.household.id }}">Accept</a>
+                </div>
+                <div class="cell large-6 medium-6 small-6" style="text-align: right;">
+                    <a style="color: #ff3333;" href="/decline/{{ invite.id }}">Decline</a>
+                </div>
+
             </div>
         </div>
     </div>
-    {% endfor %}
+    <div class="cell large-2 medium-2"></div>
+{% endfor %}
 </div>
+{% endif %}
 
 {% endblock %}

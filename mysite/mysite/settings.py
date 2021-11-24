@@ -135,3 +135,11 @@ LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/'
 
 ASGI_APPLICATION = 'mysite.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('redis', 6379)],
+        },
+    },
+}
