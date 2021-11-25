@@ -42,11 +42,18 @@
             style="padding-bottom: 1vh; margin-bottom: 2vh; border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece">
             <h4>Lists</h4>
         </div>
-        {% for list in lists %}
-        <div class="grid-x">
-            <a href="list/{{ list.id}}">{{ list.name }}</a>
+        <div class="cell large-6 medium-6 small-8">
+        <ul style="margin: 0 auto; display: table;">
+            {% for list in lists %}
+            <li style="list-style-type: none;">
+                <a href="list/{{ list.id}}">{{ list.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
         </div>
-        {% endfor %}
+        <div class="cell large-6 medium-6 small-4">
+            <a class="button expanded" href="list/">Create New List</a>
+        </div>
     </div>
 
 </div>

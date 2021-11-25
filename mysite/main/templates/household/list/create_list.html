@@ -1,0 +1,6 @@
+<form action="/household/{{ houseid }}/list/" method="post">
+    {% csrf_token %}
+
+    {{ form }}
+    <input type="submit" class="button expanded" name="Create List" value="Create List" />
+</form>

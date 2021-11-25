@@ -11,7 +11,7 @@ class HouseholdModel(models.Model):
     return self.name
 
 class ListModel(models.Model):
-  name = models.CharField(max_length=255, unique=True)
+  name = models.CharField(max_length=255)
   household = models.ForeignKey(HouseholdModel, on_delete=models.CASCADE, related_name='list')
 
   def __str__(self):
@@ -23,6 +23,7 @@ class ListItemModel(models.Model):
   complete = models.BooleanField(default=False)
   list = models.ForeignKey(ListModel, on_delete=models.CASCADE, related_name='item')
   author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='item')
+  receipt = models.ImageField(upload_to='receipts/', blank=True)
 
   def __str__(self):
     return self.description

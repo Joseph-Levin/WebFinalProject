@@ -12,6 +12,7 @@ urlpatterns = [
     path('household/', views.household),
     path('household/<int:id>/', views.household_home),
     path('household/<int:id>/invite/', views.household_invite),
+    path('household/<int:id>/list/', views.new_list),
     path('household/<int:id>/list/<int:listid>/', views.view_list),
     path('household/<int:id>/list/<int:listid>/listitem/<int:itemid>/toggle/', views.list_item_toggle),
     path('household/<int:id>/list/<int:listid>/listitem/<int:itemid>/delete/', views.list_item_delete),

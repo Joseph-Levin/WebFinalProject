@@ -2,12 +2,12 @@ from typing import List
 from django.core import serializers
 from django.http.response import HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.conf import settings
 
-from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, UpdateUserForm, ListItemForm
+from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, ListForm, ListItemForm, UpdateUserForm
 from .models import HouseholdInviteModel, HouseholdModel, ListItemModel, ListModel
 
 
@@ -156,6 +156,25 @@ def household_home(request, id):
     }
 
     return render(request, 'household/home.html', context=context)
+
+@login_required
+def new_list(request, id):
+    if request.method == 'POST':
+        form = ListForm(request.POST, houseid=id)
+        if form.is_valid():
+            list = form.save(request)
+            return redirect('/household/' + str(id) + '/list/' + str(list.id))
+
+    else:
+        form = ListForm(houseid=id)
+        
+    context = {
+        'title': 'Create a List',
+        'form': form,
+        'houseid': id,
+    }
+    return render(request, 'household/list/create_list.html', context=context)
+    
 
 @login_required
 def view_list(request, id, listid):
