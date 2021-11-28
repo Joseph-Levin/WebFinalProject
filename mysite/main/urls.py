@@ -14,6 +14,7 @@ urlpatterns = [
     path('household/<int:id>/invite/', views.household_invite),
     path('household/<int:id>/list/', views.new_list),
     path('household/<int:id>/list/<int:listid>/', views.view_list),
+    path('household/<int:id>/list/<int:listid>/delete/', views.delete_list),
     path('household/<int:id>/list/<int:listid>/listitem/<int:itemid>/toggle/', views.list_item_toggle),
     path('household/<int:id>/list/<int:listid>/listitem/<int:itemid>/delete/', views.list_item_delete),
     path('household/<int:id>/list/<int:listid>/listitem/<int:itemid>/edit/', views.list_item_edit),

@@ -98,25 +98,6 @@ class UpdateUserForm(forms.ModelForm):
 
 
 class ListForm(forms.ModelForm):
-    # def __init__(self, *args, **kwargs):
-    #     self.userid = kwargs.pop('userid', None)
-    #     self.houseid = kwargs.pop('houseid', None)
-    #     super(ListForm, self).__init__(*args, **kwargs)
-
-    # class Meta:
-    #     model=models.ListModel
-    #     fields = ['name']
-
-
-    # name = forms.CharField(max_length=255)
-
-    # def save(self, request):
-    #         list_instance = models.ListModel()
-    #         list_instance.invitee = self.cleaned_data['name']
-    #         list_instance.household = models.HouseholdModel.objects.get(pk=self.houseid)
-    #         list_instance.save()
-    #         return list_instance
-
 
     def __init__(self, *args, **kwargs):
         self.houseid = kwargs.pop('houseid', None)

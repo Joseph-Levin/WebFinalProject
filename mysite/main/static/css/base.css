@@ -72,6 +72,33 @@ a.chat_button:hover {
   background-color: #07734f;
 }
 
+.household_button {
+  background-color: #575b7a;
+  margin-right: 1vw;
+}
+
+a.household_button:hover {
+  background-color: #454861;
+}
+
+.list_button {
+  background-color: #0b58a3;
+}
+
+input.list_button:hover {
+  background-color: #083e73;
+}
+
+a.list_button:hover {
+  background-color: #083e73;
+}
+
+.button_text {
+  font-size: 1vw;
+  margin-top: 1vh;
+  margin-right: 1vw;
+}
+
 .topbar-responsive {
   background: #575b7a;
   padding: 1rem 1.5rem;

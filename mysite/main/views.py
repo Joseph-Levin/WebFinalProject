@@ -149,10 +149,17 @@ def leave_household(request, id):
 def household_home(request, id):
     household = HouseholdModel.objects.get(pk=id)
     lists = ListModel.objects.filter(household=id)
+    misc_lists = lists.filter(type='M')
+    groc_lists = lists.filter(type='G')
+    shop_lists = lists.filter(type='S')
+    chore_lists = lists.filter(type='C')
 
     context = {
         'household': household,
-        'lists': lists,
+        'misc_lists': misc_lists,
+        'groc_lists': groc_lists,
+        'shop_lists': shop_lists,
+        'chore_lists': chore_lists,
     }
 
     return render(request, 'household/home.html', context=context)
@@ -180,11 +187,15 @@ def new_list(request, id):
 def view_list(request, id, listid):
     list = ListModel.objects.get(pk=listid)
     listitems = ListItemModel.objects.filter(list=listid)
+    house = HouseholdModel.objects.get(pk=id)
+    num_members = house.members.all().count()
+
 
     if request.method == 'POST':
         form = ListItemForm(request.POST, userid=request.user.id, listid=listid)
         if form.is_valid():
             form.save()
+            form = ListItemForm(userid=request.user.id, listid=listid)
     else:
         form = ListItemForm(userid=request.user.id, listid=listid)
     
@@ -192,14 +203,24 @@ def view_list(request, id, listid):
         'form': form,
         'list': list,
         'listitems': listitems,
+        'houseid': id,
+        'num_members': num_members,
     }
 
     return render(request, 'household/list/list.html', context=context)
 
 @login_required
+def delete_list(request, id, listid):
+    list = ListModel.objects.get(pk=listid)
+    list.delete()
+
+    return redirect('/household/' + str(id) + '/')
+
+@login_required
 def list_item_toggle(request, id, listid, itemid):
     list_item = ListItemModel.objects.get(pk=itemid)
     list_item.complete = not list_item.complete
+    list_item.author = request.user
     list_item.save()
 
     return redirect('/household/'+str(id)+'/list/'+str(listid))

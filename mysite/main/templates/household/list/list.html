@@ -2,44 +2,85 @@
 {% load static %}
 {% block content %}
 
-<div class="grid-container large-8 medium-8 small-12">
+<div class="grid-container large-8 medium-8 small-12"
+    style="padding-top: 2vh; padding-bottom: 2vh; margin-bottom: 2vh;">
     <div class="grid-x">
-        <h2>{{ list.name }}</h2>
+        <div class="cell large-12 medium-12 small-12">
+            <h2>{{ list.name }}</h2>
+        </div>
+        <div class="cell large-4 medium-4 small-5">
+            <a href="delete/" class="button expanded" style="background-color: #d52d08;">Delete List</a>
+        </div>
+        <div class="cell large-4 medium-4 small-2"></div>
+        <div class="cell large-4 medium-4 small-5">
+            <a href="/household/{{ houseid }}/" class="button expanded household_button">Back to Household</a>
+        </div>
     </div>
 
     {% verbatim %}
     <div id="list">
+        <h4>Incomplete</h4>
         <ul class="incomplete_items">
-            <h4>Incomplete</h4>
-            <div  v-for="item in incompleteItems">
-                <li>
-                    {{ item.fields['description'] }}
-                    <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button">Mark as Done</a>
-                    <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button">Edit</a>
-                    <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button">Delete</a>
+            <div v-for="item in incompleteItems">
+                <li v-if="item.fields['price']">
+                    <div class="grid-x">
+                        <div class="cell large-8 medium-8 small-8">
+                            {{ item.fields['description'] }} - ${{ item.fields['price'] }}
+                        </div>
+                        <div class="cell large-4 medium-4 small-4">
+                            <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Done</a>
+                            <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button button_text"
+                                style="background-color: #dcba32;">Edit</a>
+                            <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button button_text"
+                                style="background-color: #d52d08;">Delete</a>
+                        </div>
+                    </div>
+
+                </li>
+                <li v-else>
+                    <div class="grid-x">
+                        <div class="cell large-8 medium-8 small-8">
+                            {{ item.fields['description'] }}
+                        </div>
+                        <div class="cell large-4 medium-4 small-4">
+                            <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Done</a>
+                            <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button button_text"
+                                style="background-color: #dcba32;">Edit</a>
+                            <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button button_text"
+                                style="background-color: #d52d08;">Delete</a>
+                        </div>
+                    </div>
                 </li>
             </div>
 
         </ul>
 
+        <h4>Complete</h4>
         <ul class="complete_items">
-            <h4>Complete</h4>
-            <div  v-for="item in completeItems">
+            <div v-for="item in completeItems">
                 <li>
-                    {{ item.fields['description'] }}
-                    <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button">Mark not Done</a>
-                    <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button">Edit</a>
-                    <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button">Delete</a>
+                    <div class="grid-x">
+                        <div class="cell large-8 medium-8 small-8">
+                            {{ item.fields['description'] }} -<i>{{ item.fields['author'] }}</i>
+                        </div>
+                        <div class="cell large-4 medium-4 small-4">
+                            <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Not Done</a>
+                            <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button button_text"
+                                style="background-color: #dcba32;">Edit</a>
+                            <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button button_text"
+                                style="background-color: #d52d08;">Delete</a>
+                        </div>
                 </li>
             </div>
 
         </ul>
+        <div>Price = ${{ totalCosts }}</div>
 
     </div>
     {% endverbatim %}
 
     <div class="grid-x">
-        <form  method="post">
+        <form method="post">
             {% csrf_token %}
 
             {{ form }}

@@ -1,6 +1,19 @@
-<form action="/household/{{ houseid }}/list/" method="post">
-    {% csrf_token %}
+{% extends 'base.html' %}
+{% block content %}
+<div class="grid-container">
+    <h2 class="text-center">Create a New List</h2>
+    <div class="grid-x">
+        <div class="cell large-2 medium-2"></div>
+        <div class="cell large-8 medium-8 small-12">
+            <form action="/household/{{ houseid }}/list/" method="post">
+                {% csrf_token %}
 
-    {{ form }}
-    <input type="submit" class="button expanded" name="Create List" value="Create List" />
-</form>
+                {{ form }}
+                <input type="submit" class="button expanded list_button" name="Create List" value="Create List" />
+            </form>
+        </div>
+        <div class="cell large-2 medium-2"></div>
+
+    </div>
+</div>
+{% endblock %}

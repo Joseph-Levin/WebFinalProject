@@ -37,22 +37,60 @@
         {% endfor %}
     </div>
 
-    <div class="grid-x">
+    <div class="grid-x" style="padding-bottom: 2vh; margin-bottom: 2vh;">
         <div class="cell large-12 medium-12 small-12 text-center"
             style="padding-bottom: 1vh; margin-bottom: 2vh; border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece">
             <h4>Lists</h4>
         </div>
-        <div class="cell large-6 medium-6 small-8">
-        <ul style="margin: 0 auto; display: table;">
-            {% for list in lists %}
-            <li style="list-style-type: none;">
-                <a href="list/{{ list.id}}">{{ list.name }}</a>
-            </li>
-            {% endfor %}
-        </ul>
+            <div class="cell large-4 medium-4 small-4"></div>
+            <div class="cell large-4 medium-4 small-4">
+                <a class="button expanded list_button" href="list/">Create New List</a>
+            </div>
+            <div class="cell large-4 medium-4 small-4"></div>
+
+        <div class="cell large-12 medium-12 small-12"></div>
+
+        <div class="cell large-5 medium-5 small-12">
+            <h5 style="border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece;">Shopping</h5>
+            <ul>
+                {% for list in shop_lists %}
+                <li style="list-style-type: none;">
+                    <a href="list/{{ list.id}}">{{ list.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-        <div class="cell large-6 medium-6 small-4">
-            <a class="button expanded" href="list/">Create New List</a>
+        <div class="cell large-2 medium-2"></div>
+        <div class="cell large-5 medium-5 small-12">
+            <h5 style="border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece;">Grocery</h5>
+            <ul>
+                {% for list in groc_lists %}
+                <li style="list-style-type: none;">
+                    <a href="list/{{ list.id}}">{{ list.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="cell large-5 medium-5 small-12">
+            <h5 style="border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece;">Chore</h5>
+            <ul>
+                {% for list in chore_lists %}
+                <li style="list-style-type: none;">
+                    <a href="list/{{ list.id}}">{{ list.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="cell large-2 medium-2"></div>
+        <div class="cell large-5 medium-5 small-12">
+            <h5 style="border-bottom-style: solid; border-bottom-width: thin; border-bottom-color: #cecece;">Miscellaneous</h5>
+            <ul>
+                {% for list in misc_lists %}
+                <li style="list-style-type: none;">
+                    <a href="list/{{ list.id}}">{{ list.name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 

@@ -1,60 +1,97 @@
 <!-- chat/templates/chat/room.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8"/>
-    <title>Chat Room</title>
-</head>
-<body>
-    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
-    {{ room_name|json_script:"room-name" }}
-    {{ username|json_script:"user-name" }}
-    <script>
-        const roomName = JSON.parse(document.getElementById('room-name').textContent);
-        const userName = JSON.parse(document.getElementById('user-name').textContent);
+{% extends "base.html" %}
+{% block content %}
+<div class="grid-x">
+    <div class="cell large-12 medium-12 small-12 text-center">
+        <h1>{{ household_name }} Household Chat</h1>
+    </div>
+    <div class="cell large-1 medium-1"></div>
+    <div class="cell large-10 medium-10 small-12">
+        <div id="chat-messages" style="background-color: #D1E1E7; padding: 1vh; height: 50vh; overflow-y: scroll;">
+            {% for message in messages %}
+            <b>{{ message.username }}</b>: {{ message.content }}<br>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="cell large-1 medium-1"></div>
 
-        const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chat/'
-            + roomName
-            + '/'
-        );
+    <div class="cell large-1 medium-1"></div>
+    <div class="cell large-10 medium-10 small-12">
+        <div class="control">
+            <input id="chat-message-input" class="input" placeholder="Message" type="text" size="100">
+        </div>
+    </div>
+    <div class="cell large-1 medium-1"></div>
 
-        chatSocket.onmessage = function(e) {
-            const data = JSON.parse(e.data);
+    <div class="cell large-1 medium-1"></div>
+    <div class="cell large-4 medium-4 small-5">
+        <a id="chat-message-submit" class="button expanded chat_button" value="Send">Send</a>
+    </div>
+    <div class="cell large-2 medium-2 small-2"></div>
+    <div class="cell large-4 medium-4 small-5">
+        <a class="button expanded household_button" href="/household/{{ room_name }}/">Back to Household</a>
+    </div>
+    <div class="cell large-1 medium-1"></div>
+</div>
 
-            if (data.message){
-                document.querySelector('#chat-log').value += (data.username + ': ' + data.message + '\n');
-            }
-            else {
-                alert('The message was empty')
-            }
-        };
+{{ room_name|json_script:"room-name" }}
+{{ username|json_script:"user-name" }}
+<script>
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+    const userName = JSON.parse(document.getElementById('user-name').textContent);
 
-        chatSocket.onclose = function(e) {
-            console.error('Chat socket closed unexpectedly');
-        };
+    const chatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chat/'
+        + roomName
+        + '/'
+    );
 
-        document.querySelector('#chat-message-input').focus();
-        document.querySelector('#chat-message-input').onkeyup = function(e) {
-            if (e.keyCode === 13) {  // enter, return
-                document.querySelector('#chat-message-submit').click();
-            }
-        };
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
 
-        document.querySelector('#chat-message-submit').onclick = function(e) {
-            const messageInputDom = document.querySelector('#chat-message-input');
-            const message = messageInputDom.value;
+        if (data.message) {
+            document.querySelector('#chat-messages').innerHTML += ('<b>' + data.username + '</b>: ' + data.message + '<br>');
+        }
+        else {
+            alert('The message was empty')
+        }
+
+        scrollToBottom();
+    };
+
+    chatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function (e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function (e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        if (message != "") {
             chatSocket.send(JSON.stringify({
                 'message': message,
                 'username': userName,
                 'room': roomName
             }));
-            messageInputDom.value = '';
-        };
-    </script>
-</body>
-</html>
+
+        }
+        messageInputDom.value = '';
+    };
+
+
+    function scrollToBottom() {
+        let objDiv = document.getElementById("chat-messages");
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+
+    scrollToBottom();
+</script>
+{% endblock %}

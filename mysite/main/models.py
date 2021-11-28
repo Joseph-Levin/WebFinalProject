@@ -11,7 +11,9 @@ class HouseholdModel(models.Model):
     return self.name
 
 class ListModel(models.Model):
+  LIST_TYPES = (('G', 'Grocery'), ('S', 'Shopping'), ('C', 'Chore'), ('M', 'Miscellaneous'))
   name = models.CharField(max_length=255)
+  type = models.CharField(max_length=1, choices=LIST_TYPES)
   household = models.ForeignKey(HouseholdModel, on_delete=models.CASCADE, related_name='list')
 
   def __str__(self):

@@ -4,6 +4,7 @@ const List = {
             listData: [],
             completeItems: [],
             incompleteItems: [],
+            totalCosts: 0.0,
         }
     },
     mounted() {
@@ -17,15 +18,17 @@ const List = {
                 for (item of listApp.listData){
                     if (item.fields['complete']){
                         listApp.completeItems.push(item)
+                        if (item.fields['price']){
+                            listApp.totalCosts += parseFloat(item.fields['price'])
+                        }
                     }
                     else {
                         listApp.incompleteItems.push(item)
                     }
                 }
+                listApp.totalCosts = listApp.totalCosts.toFixed(2)
+                console.log(listApp.totalCosts);
 
-                console.log(response.data);
-                console.log(listApp.completeItems)
-                console.log(listApp.incompleteItems)
             })
             .catch(function (error) {
                 // handle error
@@ -38,9 +41,13 @@ const List = {
                 listApp.listData = response.data;
                 let completeItems = [];
                 let incompleteItems = [];
+                let totalCosts = 0.0
                 for (item of listApp.listData){
                     if (item.fields['complete']){
                         completeItems.push(item);
+                        if (item.fields['price']){
+                            totalCosts += parseFloat(item.fields['price']);
+                        }
                     }
                     else {
                         incompleteItems.push(item);
@@ -49,6 +56,8 @@ const List = {
 
                 listApp.completeItems = completeItems;
                 listApp.incompleteItems = incompleteItems;
+                listApp.totalCosts = totalCosts.toFixed(2);
+                console.log(listApp.totalCosts);
 
             })
             .catch(function (error) {
