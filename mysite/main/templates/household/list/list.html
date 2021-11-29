@@ -18,14 +18,14 @@
     </div>
 
     {% verbatim %}
-    <div id="list">
+    <div v-cloak id="list">
         <h4>Incomplete</h4>
         <ul class="incomplete_items">
             <div v-for="item in incompleteItems">
-                <li v-if="item.fields['price']">
+                <li v-if="item['price']">
                     <div class="grid-x">
                         <div class="cell large-8 medium-8 small-8">
-                            {{ item.fields['description'] }} - ${{ item.fields['price'] }}
+                            {{ item['description'] }} - ${{ item['price'] }}
                         </div>
                         <div class="cell large-4 medium-4 small-4">
                             <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Done</a>
@@ -40,7 +40,7 @@
                 <li v-else>
                     <div class="grid-x">
                         <div class="cell large-8 medium-8 small-8">
-                            {{ item.fields['description'] }}
+                            {{ item['description'] }}
                         </div>
                         <div class="cell large-4 medium-4 small-4">
                             <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Done</a>
@@ -58,10 +58,34 @@
         <h4>Complete</h4>
         <ul class="complete_items">
             <div v-for="item in completeItems">
-                <li>
+                <li v-if="item['receipt'] == null">
                     <div class="grid-x">
                         <div class="cell large-8 medium-8 small-8">
-                            {{ item.fields['description'] }} -<i>{{ item.fields['author'] }}</i>
+                            {{ item['description'] }} - <i>{{ item['author']['username'] }}</i>
+                        </div>
+                        <div class="cell large-4 medium-4 small-4">
+                            <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Not Done</a>
+                            <a v-bind:href="'listitem/' +  item.pk + '/edit/'" class="button button_text"
+                                style="background-color: #dcba32;">Edit</a>
+                            <a v-bind:href="'listitem/' + item.pk + '/delete/'" class="button button_text"
+                                style="background-color: #d52d08;">Delete</a>
+                        </div>
+                </li>
+            </div>
+
+        </ul>
+        <h5>Items with Receipts</h5>
+        <ul class="completed_items_receipt">
+            <div v-for="item in completeItems">
+                <li v-if="item['receipt'] != null" style="padding-bottom: 1vh;">
+                    <div class="grid-x">
+                        <div class="cell large-12 medium-12 small-12">
+                            <a v-bind:href="item['receipt']" target="_blank">
+                                <img v-bind:src="item['receipt']" style="height: 20vh;">
+                            </a>
+                        </div>
+                        <div class="cell large-8 medium-8 small-8">
+                            {{ item['description'] }} - <i>{{ item['author']['username'] }}</i>
                         </div>
                         <div class="cell large-4 medium-4 small-4">
                             <a v-bind:href="'listitem/' + item.pk + '/toggle/'" class="button button_text">Not Done</a>
@@ -75,12 +99,13 @@
 
         </ul>
         <div>Price = ${{ totalCosts }}</div>
+        <div>Cost per Member = ${{ costPerUser }}</div>
 
     </div>
     {% endverbatim %}
 
     <div class="grid-x">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
             {{ form }}
@@ -94,6 +119,7 @@
 {% block scripts %}
 <script>
     window.listId = "{{ list.id }}"
+    window.numMembers = "{{ num_members }}"
 </script>
 <script src="https://unpkg.com/vue@next"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

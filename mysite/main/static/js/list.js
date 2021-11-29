@@ -5,21 +5,25 @@ const List = {
             completeItems: [],
             incompleteItems: [],
             totalCosts: 0.0,
+            costPerUser: 0.0,
         }
     },
     mounted() {
         //get request
         //use results
-        let url = '/json/list/' + window.listId
+        let url = '/json/list/' + window.listId;
+        let numMembers = window.numMembers;
         axios.get(url)
             .then(function (response) {
                 // handle success
                 listApp.listData = response.data;
+                console.log("data");
+                console.log(response.data);
                 for (item of listApp.listData){
-                    if (item.fields['complete']){
+                    if (item['complete']){
                         listApp.completeItems.push(item)
-                        if (item.fields['price']){
-                            listApp.totalCosts += parseFloat(item.fields['price'])
+                        if (item['price']){
+                            listApp.totalCosts += parseFloat(item['price'])
                         }
                     }
                     else {
@@ -27,7 +31,7 @@ const List = {
                     }
                 }
                 listApp.totalCosts = listApp.totalCosts.toFixed(2)
-                console.log(listApp.totalCosts);
+                listApp.costPerUser = (listApp.totalCosts / numMembers).toFixed(2);
 
             })
             .catch(function (error) {
@@ -43,10 +47,10 @@ const List = {
                 let incompleteItems = [];
                 let totalCosts = 0.0
                 for (item of listApp.listData){
-                    if (item.fields['complete']){
+                    if (item['complete']){
                         completeItems.push(item);
-                        if (item.fields['price']){
-                            totalCosts += parseFloat(item.fields['price']);
+                        if (item['price']){
+                            totalCosts += parseFloat(item['price']);
                         }
                     }
                     else {
@@ -57,7 +61,8 @@ const List = {
                 listApp.completeItems = completeItems;
                 listApp.incompleteItems = incompleteItems;
                 listApp.totalCosts = totalCosts.toFixed(2);
-                console.log(listApp.totalCosts);
+                listApp.costPerUser = (listApp.totalCosts / numMembers).toFixed(2);
+
 
             })
             .catch(function (error) {

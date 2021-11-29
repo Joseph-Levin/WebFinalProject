@@ -9,6 +9,7 @@ from django.conf import settings
 
 from .forms import RegistrationForm, HouseholdForm, HouseholdInviteForm, ListForm, ListItemForm, UpdateUserForm
 from .models import HouseholdInviteModel, HouseholdModel, ListItemModel, ListModel
+from .serializers import UserSerializer, ListItemSerializer
 
 
 def index(request):
@@ -192,7 +193,7 @@ def view_list(request, id, listid):
 
 
     if request.method == 'POST':
-        form = ListItemForm(request.POST, userid=request.user.id, listid=listid)
+        form = ListItemForm(request.POST, request.FILES, userid=request.user.id, listid=listid)
         if form.is_valid():
             form.save()
             form = ListItemForm(userid=request.user.id, listid=listid)
@@ -236,7 +237,7 @@ def list_item_delete(request, id, listid, itemid):
 def list_item_edit(request, id, listid, itemid):
     list_item = ListItemModel.objects.get(pk=itemid)
     if request.method == 'POST':
-        form = ListItemForm(request.POST, instance=list_item)
+        form = ListItemForm(request.POST, request.FILES, instance=list_item)
         if form.is_valid():
             form.save()
             return redirect('/household/'+str(id)+'/list/'+str(listid))
@@ -250,6 +251,7 @@ def list_item_edit(request, id, listid, itemid):
 def list_json(request, listid):
     list = ListModel.objects.get(pk=listid)
     list_items = ListItemModel.objects.filter(list=listid)
-    data = serializers.serialize('json', list_items)
+    # data = serializers.serialize('json', list_items)
+    serialized = ListItemSerializer(list_items, context={'request': request}, many=True)
 
-    return HttpResponse(data)
+    return JsonResponse(serialized.data, safe=False)

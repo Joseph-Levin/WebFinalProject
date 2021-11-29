@@ -1,3 +1,4 @@
+# Incorporated code from https://channels.readthedocs.io/en/stable/tutorial/part_2.html
 from django.urls import re_path
 
 from . import consumers
